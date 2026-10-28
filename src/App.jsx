@@ -185,7 +185,63 @@ function ProjectArtwork({ project }) {
           <text x="0" y="225" className="art-small">ACTUAL REGIONAL BOUNDARIES</text>
         </g>
       </>;
-      case 'geo': return <><g stroke="var(--project-accent)" fill="none" opacity=".16" strokeWidth="1"><path d="M100 54L188 98L270 60L359 108L448 72M95 174L166 218L284 180L402 234L473 178M188 98L166 218M270 60L284 180M359 108L402 234M448 72L473 178" /></g><g fill="var(--project-accent)" opacity=".1"><path d="M213 32l38 17-3 29 34 18-15 24 13 19-30 39 14 18-33 26-21-13-10-35-32-18-4-37 21-18-3-30z" /></g><g stroke="var(--project-accent)" strokeWidth="2.6" fill="none" strokeLinecap="round"><path d="M158 158Q226 30 335 117T462 137" strokeDasharray="5 9"/><path d="M147 209Q245 161 334 117" opacity=".65"/></g>{[[158,158],[335,117],[462,137],[147,209],[265,72]].map(([x,y],i)=><g key={i}><circle cx={x} cy={y} r="12" fill="var(--project-accent)" opacity=".13" /><circle cx={x} cy={y} r="4.5" fill="var(--project-accent)" /></g>)}<rect x="37" y="38" width="132" height="54" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/><text x="53" y="59" className="art-small">SHIPMENT NETWORK</text><text x="53" y="78" className="art-number">PH / REGIONS</text><rect x="366" y="199" width="146" height="46" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/><text x="383" y="218" className="art-small">CORRIDOR ANALYSIS</text><path d="M383 231H495" stroke="var(--project-accent)" strokeWidth="3" strokeLinecap="round" /></>;
+      case 'geo': return <>
+        {/* Faithful Philippine region outlines; only hub and route overlays are illustrative. */}
+        <g>
+          <ellipse cx="206" cy="153" rx="114" ry="116" fill="var(--project-accent)" fillOpacity=".055" />
+          <circle cx="206" cy="153" r="120" stroke="var(--project-accent)" strokeOpacity=".11" strokeWidth="1" strokeDasharray="2 7" fill="none" />
+          <g transform="translate(20 -6) scale(1.085)">
+            {philippineRegionPaths.map((region, index) => (
+              <path
+                key={region.id}
+                d={region.d}
+                fill="var(--project-accent)"
+                fillOpacity={0.25 + (index % 4) * 0.085}
+                stroke="var(--art-bg)"
+                strokeWidth=".65"
+                strokeLinejoin="round"
+                fillRule="evenodd"
+              />
+            ))}
+            {/* Illustrative delivery routes between approximate city-center points, not actual shipment traces. */}
+            <g stroke="var(--art-bright)" strokeOpacity=".73" strokeWidth="1.35" fill="none" strokeDasharray="4 4.5" strokeLinecap="round">
+              <path d="M166,130 Q198,142 210,187" />
+              <path d="M166,130 Q170,165 190,182" />
+              <path d="M190,182 Q202,175 210,187" />
+              <path d="M210,187 Q211,207 222,213" />
+              <path d="M222,213 Q241,217 235,230" />
+            </g>
+            {[[166,130],[190,182],[210,187],[222,213],[235,230]].map(([x, y], index) => (
+              <g key={index}>
+                <circle cx={x} cy={y} r={index === 0 ? 10 : 7.5} fill="var(--project-accent)" fillOpacity=".17" />
+                <circle cx={x} cy={y} r="3.1" fill="var(--art-bright)" stroke="var(--art-bg)" strokeWidth="1.1" />
+              </g>
+            ))}
+          </g>
+          <text x="33" y="58" className="art-small">NETWORK / PHILIPPINES</text>
+          <text x="33" y="75" className="art-number">18 REGION OUTLINES</text>
+          <text x="33" y="257" className="art-small">ILLUSTRATIVE HUBS + ROUTES</text>
+        </g>
+        <g transform="translate(324 58)">
+          <text x="0" y="0" className="art-small">NEXROUTE CONTROL TOWER</text>
+          <text x="0" y="24" className="art-number">DELIVERY INTELLIGENCE</text>
+          <g transform="translate(0 43)">
+            <rect width="206" height="138" rx="10" fill="var(--art-card)" stroke="var(--art-line)" />
+            <text x="15" y="24" className="art-small">CORRIDOR EXPLORER</text>
+            <path d="M25 47H181M25 84H181" stroke="var(--art-line)" strokeWidth="1" strokeDasharray="3 5" />
+            <path d="M34 63L96 63L167 63" fill="none" stroke="var(--art-line)" strokeWidth="2.5" strokeLinecap="round" />
+            <path d="M34 63L96 63L167 63" fill="none" stroke="var(--project-accent)" strokeWidth="1.8" strokeLinecap="round" strokeDasharray="5 5" />
+            {[[34,63],[96,63],[167,63]].map(([x,y],index) => (
+              <g key={index}><circle cx={x} cy={y} r="8" fill="var(--project-accent)" fillOpacity=".16"/><circle cx={x} cy={y} r="3.3" fill="var(--project-accent)" /></g>
+            ))}
+            <text x="15" y="108" className="art-small">HUBS / COURIERS / SLAS</text>
+            <rect x="15" y="118" width="34" height="3" rx="1.5" fill="var(--project-accent)" opacity=".8" />
+            <rect x="55" y="118" width="61" height="3" rx="1.5" fill="var(--project-accent)" opacity=".38" />
+            <rect x="122" y="118" width="34" height="3" rx="1.5" fill="var(--project-accent)" opacity=".55" />
+          </g>
+          <text x="0" y="208" className="art-small">GEOGRAPHIC OPERATIONS VIEW</text>
+        </g>
+      </>;
       case 'retail': return <><g transform="translate(44 42)"><text y="1" className="art-small">REVENUE BY PERIOD</text><path d="M0 181H462" stroke="currentColor" strokeOpacity=".25"/><path d="M0 137H462M0 93H462M0 49H462" stroke="currentColor" strokeOpacity=".11" strokeDasharray="4 6"/>{[65,92,73,116,141,102,151,124,174,160,199,213].map((h,i)=><rect key={i} x={14+i*37} y={180-h*.78} width="22" height={h*.78} rx="4" fill="var(--project-accent)" opacity={.26+i*.057}/>) }<path d="M25 115L62 103L99 111L136 84L173 77L210 98L247 66L284 78L321 53L358 57L395 40L432 24" fill="none" stroke="var(--art-bright)" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" /></g><rect x="333" y="28" width="177" height="52" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/><text x="349" y="49" className="art-small">RELATIONAL ANALYSIS</text><text x="349" y="67" className="art-number">SQL → PYTHON</text></>;
       case 'finance': return <><text x="40" y="45" className="art-small">PROFITABILITY OVERVIEW</text><path d="M38 215H525M38 166H525M38 117H525M38 68H525" stroke="currentColor" strokeOpacity=".12" strokeDasharray="4 6"/><path d="M41 208C93 208 96 177 143 178S224 119 275 138S351 103 396 108S473 56 518 65V240H41Z" fill={'url(#fill-' + project.id + ')'} /><path d="M41 208C93 208 96 177 143 178S224 119 275 138S351 103 396 108S473 56 518 65" fill="none" stroke="var(--project-accent)" strokeWidth="3.5" strokeLinecap="round"/><circle cx="396" cy="108" r="6" fill="var(--project-accent)" stroke="var(--art-bg)" strokeWidth="3"/><rect x="336" y="121" width="154" height="62" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/><text x="352" y="143" className="art-small">MEASURE WHAT MATTERS</text><text x="352" y="166" className="art-number">REVENUE / MARGIN</text></>;
       case 'inventory': return <><text x="39" y="38" className="art-small">INVENTORY HEALTH MATRIX</text>{Array.from({length:40},(_,i)=>{const n=(i*13+3)%19;return <rect key={i} x={42+(i%10)*37} y={55+Math.floor(i/10)*38} width="28" height="28" rx="5" fill="var(--project-accent)" opacity={.12+n*.038}/>})}<rect x="421" y="52" width="97" height="154" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/><text x="436" y="73" className="art-small">STOCK LEVEL</text>{[25,54,39,61,45].map((w,i)=><g key={i}><rect x="436" y={90+i*23} width="62" height="7" rx="3" fill="var(--art-line)"/><rect x="436" y={90+i*23} width={w} height="7" rx="3" fill="var(--project-accent)" opacity={.55+i*.09}/></g>)}<text x="42" y="242" className="art-number">PRODUCTS / REORDER / SUPPLIERS</text></>;
