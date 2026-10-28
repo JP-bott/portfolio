@@ -91,3 +91,80 @@
 @media(max-width:780px){.tableau-heading{align-items:start;flex-direction:column;gap:20px}.tableau-heading-aside{max-width:100%}.tableau-controls{align-items:stretch;flex-direction:column}.tableau-form label{flex:1}.tableau-form input{width:100%}.tableau-preview-foot{align-items:start;flex-direction:column}.tableau-preview-foot .button{align-self:stretch}}
 @media(max-width:530px){.tableau-grid{grid-template-columns:1fr}.tableau-form{flex-direction:column;align-items:stretch}.tableau-form label,.tableau-form select{width:100%}.tableau-end{align-items:start;flex-direction:column}.tableau-preview-head h3{font-size:15px}}
 @media(prefers-reduced-motion:reduce){.tableau-card,.tableau-image img,.tableau-skeleton{animation:none!important;transition:none!important}}
+
+/* Contact directory: unified destinations instead of competing CTA buttons. */
+.contact-channels-label{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.14em;
+  margin:0 0 14px;
+  color:var(--accent-text);
+  opacity:.68;
+}
+.contact-links{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:11px;
+  max-width:890px;
+}
+.contact-link{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-width:0;
+  padding:16px 18px;
+  border:1px solid color-mix(in srgb,var(--accent-text) 20%,transparent);
+  border-radius:12px;
+  background:color-mix(in srgb,#fff 14%,transparent);
+  color:var(--accent-text);
+  text-decoration:none;
+  transition:background-color .2s ease,border-color .2s ease,transform .2s ease;
+}
+.contact-link:hover{
+  background:color-mix(in srgb,#fff 33%,transparent);
+  border-color:color-mix(in srgb,var(--accent-text) 40%,transparent);
+  transform:translateY(-2px);
+}
+.contact-link:focus-visible{
+  outline:3px solid var(--accent-text);
+  outline-offset:3px;
+}
+.contact-link-icon{
+  display:grid;
+  place-items:center;
+  flex:0 0 42px;
+  width:42px;
+  height:42px;
+  border-radius:10px;
+  background:color-mix(in srgb,var(--accent-text) 10%,transparent);
+}
+.contact-link-copy{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  flex:1;
+  min-width:0;
+}
+.contact-link-copy strong{
+  font-size:14px;
+  font-weight:750;
+  line-height:1.2;
+}
+.contact-link-copy small{
+  font-size:11px;
+  line-height:1.45;
+  opacity:.7;
+  overflow-wrap:anywhere;
+}
+.contact-link-arrow{
+  flex:0 0 auto;
+  opacity:.7;
+  transition:transform .2s ease;
+}
+.contact-link:hover .contact-link-arrow{transform:translate(2px,-2px)}
+@media(max-width:680px){
+  .contact-links{grid-template-columns:1fr;gap:9px}
+  .contact-link{padding:13px 14px;gap:12px}
+  .contact-link-icon{width:39px;height:39px;flex-basis:39px}
+}

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Activity, ArrowDown, ArrowRight, ArrowUpRight, BarChart3, Check, ChevronRight,
-  Command, Database, ExternalLink, Layers3, MapPin, Menu, Moon,
+  Command, Database, ExternalLink, Github, Layers3, Linkedin, Mail, MapPin, Menu, Moon,
   Search, SlidersHorizontal, Sun, TrendingUp, X,
 } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -315,7 +315,35 @@ function About() {
 }
 
 function Contact() {
-  return <section className="contact-section" id="contact"><div className="shell"><div className="contact-inner"><div className="contact-topline"><span><span className="contact-pulse" /> LET'S BUILD SOMETHING MEANINGFUL</span><span>06 / CONNECT</span></div><h2>Have a question<br />worth <em>exploring?</em></h2><p>I'm always interested in learning, thoughtful collaborations and opportunities to work on meaningful data problems.</p><div className="contact-actions"><a href={profile.github} target="_blank" rel="noopener noreferrer" className="button contact-button">Connect on GitHub <ArrowUpRight size={19} /></a></div><div className="contact-decoration" aria-hidden="true">↗</div></div></div></section>;
+  const channels = [
+    { label: 'Email', detail: profile.email, href: `mailto:${profile.email}`, icon: Mail, external: false },
+    { label: 'LinkedIn', detail: 'Professional network', href: profile.linkedin, icon: Linkedin, external: true },
+    { label: 'Tableau Public', detail: 'Interactive visualizations', href: profile.tableau, icon: BarChart3, external: true },
+    { label: 'GitHub', detail: 'Source code & projects', href: profile.github, icon: Github, external: true },
+  ];
+
+  return (
+    <section className="contact-section" id="contact">
+      <div className="shell">
+        <div className="contact-inner">
+          <div className="contact-topline"><span><span className="contact-pulse" /> LET'S BUILD SOMETHING MEANINGFUL</span><span>06 / CONNECT</span></div>
+          <h2>Have a question<br />worth <em>exploring?</em></h2>
+          <p>I'm always interested in learning, thoughtful collaborations and opportunities to work on meaningful data problems.</p>
+          <div className="contact-channels-label">CONNECT ON</div>
+          <div className="contact-links" aria-label="Ways to connect">
+            {channels.map(({ label, detail, href, icon: Icon, external }) => (
+              <a key={label} className="contact-link" href={href} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})} aria-label={`Connect on ${label}`}>
+                <span className="contact-link-icon"><Icon size={19} strokeWidth={1.8} aria-hidden="true" /></span>
+                <span className="contact-link-copy"><strong>{label}</strong><small>{detail}</small></span>
+                <ArrowUpRight size={17} strokeWidth={1.8} className="contact-link-arrow" aria-hidden="true" />
+              </a>
+            ))}
+          </div>
+          <div className="contact-decoration" aria-hidden="true">↗</div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function Footer() {
