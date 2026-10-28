@@ -7,12 +7,13 @@ A responsive Vite + React portfolio showcasing real GitHub case studies in SQL, 
 
 ## Highlights
 
-- Nine curated projects based on their public repository READMEs, each linking to original source code
+- Nine curated GitHub projects based on their public repository READMEs, each linking to original source code
+- Dedicated Tableau Public gallery with public workbook thumbnails, filtering, sorting and interactive previews
 - Project search, category filters, expandable case studies and keyboard command search (`Ctrl/⌘ + K`)
 - Interactive financial example with sourced **synthetic** figures and readable hover tooltips
 - Light and dark mode with saved preference, mobile navigation and reduced-motion support
 - Responsive layouts, keyboard-accessible dialogs, focus handling and explicit dataset disclaimers
-- Zero backend services, tokens or required environment variables
+- One read-only Vercel function for public Tableau workbook metadata; no keys or environment variables required
 - SEO metadata, social-cover SVG, favicon, Vercel configuration and GitHub Actions build check
 
 ## Run locally
@@ -39,7 +40,13 @@ npm run preview
 4. Output directory: `dist`.
 5. Deploy. No environment variables are required.
 
-The included `vercel.json` defines the build settings and a single-page app fallback. Vercel automatically redeploys after future pushes when connected to this repository.
+The included `vercel.json` defines the build settings and preserves the `/api/tableau` serverless route. Vercel automatically redeploys after future pushes when connected to this repository.
+
+## Tableau Public integration
+
+The Tableau section uses the public workbooks API for [John Paul Torres](https://public.tableau.com/app/profile/john.torres1912/vizzes). The Vercel function at `api/tableau.js` exposes public-only, sanitized metadata for the browser and caches successful responses. The Vite dev server runs the same handler. Unavailable endpoints do not cause invented project names: the gallery links directly to Tableau Public instead. The in-page Tableau viewer requires embedding to be permitted by Tableau; external links always remain available.
+
+Run `npm test` to test response normalization.
 
 ## Updating your projects
 
@@ -49,7 +56,7 @@ The code intentionally distinguishes illustrative SVG card artwork from real pro
 
 ## Design and technology
 
-React 19, Vite 6, Recharts, lucide-react, custom responsive CSS, Google Fonts (Manrope, DM Sans, DM Mono). No paid libraries. The site has no analytics trackers, external API tokens, or server components.
+React 19, Vite 6, Recharts, lucide-react, custom responsive CSS, Google Fonts (Manrope, DM Sans, DM Mono). No paid libraries. No external API tokens or login are required. The Tableau gallery uses a small read-only serverless proxy.
 
 ## Data ethics
 

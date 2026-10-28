@@ -4,6 +4,7 @@ export const profile = {
   name: 'John Paul Torres',
   firstName: 'John Paul',
   github: 'https://github.com/JP-bott',
+  tableau: 'https://public.tableau.com/app/profile/john.torres1912/vizzes',
   role: 'Aspiring Data Analytics Professional',
   headline: 'Making information useful.',
   intro: 'I build analytical experiences that turn messy questions into understandable insights, from SQL explorations to interactive business intelligence and location-aware operations tools.',

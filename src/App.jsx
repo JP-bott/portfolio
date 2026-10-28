@@ -64,6 +64,7 @@ function Header({ theme, toggleTheme, onSearch }) {
       <Brand onClick={close} />
       <nav className={'main-nav' + (menuOpen ? ' is-open' : '')} aria-label="Main navigation">
         <a href="#work" onClick={close}>Work</a>
+        <a href="#tableau" onClick={close}>Tableau</a>
         <a href="#expertise" onClick={close}>Expertise</a>
         <a href="#approach" onClick={close}>Approach</a>
         <a href="#about" onClick={close}>About</a>
@@ -206,9 +207,95 @@ function Work({ onOpen }) {
   </div></section>;
 }
 
+
+const TABLEAU_URL = profile.tableau;
+
+function TableauCard({ viz, onPreview }) {
+  const [imageError, setImageError] = useState(false);
+  return <article className="tableau-card">
+    <button className="tableau-image" onClick={() => onPreview(viz)} aria-label={'Preview '+viz.title}>
+      {!imageError ? <img src={viz.thumbnail} alt={'Tableau thumbnail for '+viz.title} loading="lazy" onError={() => setImageError(true)}/> : <span className="tableau-image-placeholder"><BarChart3 size={36}/>TABLEAU PUBLIC</span>}
+      <span className="tableau-image-action">Preview visualization <ArrowUpRight size={14}/></span>
+    </button>
+    <div className="tableau-card-body">
+      <div className="tableau-card-meta"><span><i/> PUBLISHED VISUALIZATION</span>{viz.published && <time dateTime={viz.published}>{new Date(viz.published+'T00:00:00Z').toLocaleDateString('en-US',{month:'short',year:'numeric',timeZone:'UTC'})}</time>}</div>
+      <h3>{viz.title}</h3>
+      {viz.description && <p>{viz.description}</p>}
+      <div className="tableau-card-bottom"><small>{viz.views != null ? new Intl.NumberFormat('en-US').format(viz.views)+' views' : 'Interactive dashboard'}</small><a href={viz.url} target="_blank" rel="noopener noreferrer">View on Tableau <ExternalLink size={14}/></a></div>
+    </div>
+  </article>;
+}
+
+function TableauPreview({ viz, onClose }) {
+  const closeRef=useRef(null);
+  const modalRef=useRef(null);
+  useEffect(()=>{
+    const previousFocus=document.activeElement;
+    const previousOverflow=document.body.style.overflow;
+    document.body.style.overflow='hidden';closeRef.current?.focus();
+    const key=(event)=>{
+      if(event.key==='Escape'){event.preventDefault();onClose();}
+      if(event.key==='Tab'){
+        const controls=[...modalRef.current.querySelectorAll('button,a[href]')];
+        if(event.shiftKey && document.activeElement===controls[0]){event.preventDefault();controls.at(-1).focus();}
+        if(!event.shiftKey && document.activeElement===controls.at(-1)){event.preventDefault();controls[0].focus();}
+      }
+    };
+    document.addEventListener('keydown',key);
+    return()=>{document.removeEventListener('keydown',key);document.body.style.overflow=previousOverflow;previousFocus?.focus?.();};
+  },[onClose]);
+  return <div className="modal-backdrop tableau-backdrop" onMouseDown={(e)=>{if(e.target===e.currentTarget)onClose();}}>
+    <div className="tableau-preview" role="dialog" aria-modal="true" aria-labelledby="tableau-preview-title" ref={modalRef}>
+      <div className="tableau-preview-head"><div><span>TABLEAU PUBLIC / INTERACTIVE PREVIEW</span><h3 id="tableau-preview-title">{viz.title}</h3></div><button type="button" className="modal-close" ref={closeRef} onClick={onClose} aria-label="Close Tableau preview"><X size={19}/></button></div>
+      <div className="tableau-frame"><iframe src={viz.embedUrl} title={'Interactive Tableau dashboard '+viz.title} loading="lazy" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></div>
+      <div className="tableau-preview-foot"><p>If Tableau blocks embedded viewing, open the original dashboard.</p><a className="button button-primary" href={viz.url} target="_blank" rel="noopener noreferrer">Open on Tableau <ArrowUpRight size={16}/></a></div>
+    </div>
+  </div>;
+}
+
+function TableauGallery() {
+  const [items,setItems]=useState([]);
+  const [status,setStatus]=useState('loading');
+  const [search,setSearch]=useState('');
+  const [sort,setSort]=useState('recent');
+  const [expanded,setExpanded]=useState(false);
+  const [preview,setPreview]=useState(null);
+  useEffect(()=>{
+    const controller=new AbortController();
+    fetch('/api/tableau',{signal:controller.signal}).then(r=>{if(!r.ok)throw new Error('Unavailable');return r.json();})
+      .then(data=>{if(!Array.isArray(data.workbooks))throw new Error('Unexpected response');setItems(data.workbooks);setStatus('ready');})
+      .catch(e=>{if(e.name!=='AbortError')setStatus('unavailable');});
+    return()=>controller.abort();
+  },[]);
+  const matching=useMemo(()=>{
+    const q=search.trim().toLowerCase();
+    const result=items.filter(v=>!q || (v.title+' '+(v.description||'')).toLowerCase().includes(q));
+    if(sort==='popular')result.sort((a,b)=>(b.views??-1)-(a.views??-1));
+    else if(sort==='title')result.sort((a,b)=>a.title.localeCompare(b.title));
+    else result.sort((a,b)=>String(b.published||b.updated||'').localeCompare(String(a.published||a.updated||'')));
+    return result;
+  },[items,search,sort]);
+  const visible=expanded || search ? matching : matching.slice(0,6);
+  return <section className="section tableau-section" id="tableau"><div className="shell">
+    <div className="tableau-heading" data-reveal>
+      <div><div className="section-index"><span>02</span> / TABLEAU PUBLIC</div><span className="tableau-label">PUBLISHED DATA VISUALIZATIONS</span><h2>Visual stories.<br/><em>Made interactive.</em></h2></div>
+      <div className="tableau-heading-aside"><p>A collection of my published Tableau work. Explore the visualizations here, or view the full interactive experience on Tableau Public.</p><a href={TABLEAU_URL} target="_blank" rel="noopener noreferrer">Explore my Tableau profile <ArrowUpRight size={17}/></a></div>
+    </div>
+    {status==='loading' && <div className="tableau-status"><span className="tableau-live-dot"/> CONNECTING TO TABLEAU PUBLIC<div className="tableau-grid">{[1,2,3].map(n=><div key={n} className="tableau-skeleton"/>)}</div></div>}
+    {(status==='unavailable' || (status==='ready' && items.length===0)) && <div className="tableau-empty"><BarChart3 size={33}/><h3>Explore the Tableau collection</h3><p>{status==='unavailable'?'The live gallery is unavailable right now. Open my Tableau Public profile to explore the published visualizations.':'The Tableau API did not return any visible workbooks. Check my profile for the latest published projects.'}</p><a className="button button-primary" target="_blank" rel="noopener noreferrer" href={TABLEAU_URL}>Visit Tableau Public <ArrowUpRight size={17}/></a></div>}
+    {status==='ready' && items.length>0 && <>
+      <div className="tableau-controls"><div className="tableau-count"><span className="tableau-live-dot"/><strong>{items.length.toString().padStart(2,'0')}</strong> PUBLISHED VIZZES</div><div className="tableau-form"><label><Search size={16}/><input value={search} type="search" placeholder="Search Tableau dashboards" aria-label="Search Tableau dashboards" onChange={e=>{setSearch(e.target.value);setExpanded(false);}}/></label><select value={sort} onChange={e=>setSort(e.target.value)} aria-label="Sort Tableau visualizations"><option value="recent">Newest first</option><option value="popular">Most viewed</option><option value="title">A to Z</option></select></div></div>
+      {matching.length ? <div className="tableau-grid">{visible.map(v=><TableauCard key={v.id} viz={v} onPreview={setPreview}/>)}</div> : <div className="tableau-empty"><Search size={25}/><h3>No matching visualizations</h3><button className="tableau-clear" onClick={()=>setSearch('')}>Clear search <ArrowRight size={15}/></button></div>}
+      {!expanded && !search && matching.length>visible.length && <div className="tableau-more"><button className="button button-outline" onClick={()=>setExpanded(true)}>Show all {matching.length} visualizations <ArrowDown size={16}/></button></div>}
+      <div className="tableau-end"><span>VERIFIED THUMBNAILS & WORKBOOK DETAILS FROM TABLEAU PUBLIC</span><a href={TABLEAU_URL} target="_blank" rel="noopener noreferrer">FULL PROFILE <ArrowUpRight size={14}/></a></div>
+    </>}
+    {preview && <TableauPreview viz={preview} onClose={()=>setPreview(null)}/>}
+  </div></section>;
+}
+
 function Expertise() {
   const [active, setActive] = useState(0);
-  return <section className="section expertise-section" id="expertise"><div className="shell"><div className="section-heading expertise-heading" data-reveal><div><div className="section-index"><span>02</span> / TOOLKIT & THINKING</div><h2>Data thinking.<br /><em>Product mindset.</em></h2></div><p className="section-intro-small">A practical mix of analytical thinking, technical development and visual communication.</p></div>
+  return <section className="section expertise-section" id="expertise"><div className="shell"><div className="section-heading expertise-heading" data-reveal><div><div className="section-index"><span>03</span> / TOOLKIT & THINKING</div><h2>Data thinking.<br /><em>Product mindset.</em></h2></div><p className="section-intro-small">A practical mix of analytical thinking, technical development and visual communication.</p></div>
     <div className="expertise-layout"><div className="expertise-tabs" role="tablist" aria-label="Explore skill groups">{skillGroups.map((group, index) => <button key={group.title} role="tab" id={'skill-tab-' + index} aria-selected={active === index} aria-controls="skill-panel" className={'expertise-tab' + (active === index ? ' active' : '')} onClick={() => setActive(index)}><span>{group.marker} / {group.title}</span><ArrowUpRight size={20} /></button>)}</div><div className="expertise-detail" id="skill-panel" role="tabpanel" aria-labelledby={'skill-tab-' + active} key={active}><div className="detail-kicker"><span className="detail-kicker-dot" /> MY TOOLKIT / {skillGroups[active].marker}</div><h3>{skillGroups[active].intro}</h3><p>{skillGroups[active].detail}</p><div className="skills-tags">{skillGroups[active].tools.map((tool) => <span key={tool}>{tool}<span className="skill-indicator">↗</span></span>)}</div><div className="skills-footer"><span>BUILDING THROUGH PRACTICE</span><span>0{active + 1} / 03</span></div></div></div>
   </div></section>;
 }
@@ -220,19 +307,19 @@ function Approach() {
     { n: '03', title: 'Find the signal', description: 'Use SQL, Python and focused exploration to separate useful patterns from background noise.', icon: Activity },
     { n: '04', title: 'Communicate clearly', description: 'Turn findings into accessible visualizations and next-step recommendations people can use.', icon: Layers3 },
   ];
-  return <section className="section approach-section" id="approach"><div className="shell"><div className="approach-header" data-reveal><div><div className="section-index"><span>03</span> / HOW I APPROACH DATA</div><h2>Beyond the<br /><em>dashboard.</em></h2></div><p>Good analytics is not the number of charts you make. It is the quality of the questions you can help answer.</p></div><div className="approach-grid">{steps.map((step) => <div className="approach-item" key={step.n}><div className="approach-number">{step.n}<step.icon size={20} strokeWidth={1.6} /></div><h3>{step.title}</h3><p>{step.description}</p><span className="approach-bottom-line" /></div>)}</div></div></section>;
+  return <section className="section approach-section" id="approach"><div className="shell"><div className="approach-header" data-reveal><div><div className="section-index"><span>04</span> / HOW I APPROACH DATA</div><h2>Beyond the<br /><em>dashboard.</em></h2></div><p>Good analytics is not the number of charts you make. It is the quality of the questions you can help answer.</p></div><div className="approach-grid">{steps.map((step) => <div className="approach-item" key={step.n}><div className="approach-number">{step.n}<step.icon size={20} strokeWidth={1.6} /></div><h3>{step.title}</h3><p>{step.description}</p><span className="approach-bottom-line" /></div>)}</div></div></section>;
 }
 
 function About() {
-  return <section className="section about-section" id="about"><div className="shell about-layout"><div className="about-graphic" data-reveal><div className="about-graphic-grid" /><div className="about-graphic-top">A WORK IN PROGRESS <span>↗</span></div><div className="about-monogram">JP<span>.</span></div><div className="about-graphic-bottom"><span>LEARN / BUILD / REFINE</span><span>PH · 2026</span></div><span className="orbit-circle orbit-a" /><span className="orbit-circle orbit-b" /></div><div className="about-copy" data-reveal><div className="section-index"><span>04</span> / A BIT ABOUT ME</div><h2>Curiosity is<br /><em>the starting point.</em></h2><p>I'm John Paul Torres, an aspiring data analytics professional based in the Philippines. I am interested in the space where data, design and decision-making intersect.</p><p>My projects span business intelligence dashboards, relational analysis, location-aware logistics tools and data applications. I enjoy both the analytical work behind the numbers and the challenge of making those numbers easy to understand.</p><div className="about-values"><span><Check size={15} /> Business-first questions</span><span><Check size={15} /> Reproducible workflows</span><span><Check size={15} /> Thoughtful visual design</span></div><a className="inline-link" href={profile.github} target="_blank" rel="noreferrer">Explore my development journey <ArrowUpRight size={18} /></a></div></div></section>;
+  return <section className="section about-section" id="about"><div className="shell about-layout"><div className="about-graphic" data-reveal><div className="about-graphic-grid" /><div className="about-graphic-top">A WORK IN PROGRESS <span>↗</span></div><div className="about-monogram">JP<span>.</span></div><div className="about-graphic-bottom"><span>LEARN / BUILD / REFINE</span><span>PH · 2026</span></div><span className="orbit-circle orbit-a" /><span className="orbit-circle orbit-b" /></div><div className="about-copy" data-reveal><div className="section-index"><span>05</span> / A BIT ABOUT ME</div><h2>Curiosity is<br /><em>the starting point.</em></h2><p>I'm John Paul Torres, an aspiring data analytics professional based in the Philippines. I am interested in the space where data, design and decision-making intersect.</p><p>My projects span business intelligence dashboards, relational analysis, location-aware logistics tools and data applications. I enjoy both the analytical work behind the numbers and the challenge of making those numbers easy to understand.</p><div className="about-values"><span><Check size={15} /> Business-first questions</span><span><Check size={15} /> Reproducible workflows</span><span><Check size={15} /> Thoughtful visual design</span></div><a className="inline-link" href={profile.github} target="_blank" rel="noreferrer">Explore my development journey <ArrowUpRight size={18} /></a></div></div></section>;
 }
 
 function Contact() {
-  return <section className="contact-section" id="contact"><div className="shell"><div className="contact-inner"><div className="contact-topline"><span><span className="contact-pulse" /> LET'S BUILD SOMETHING MEANINGFUL</span><span>05 / CONNECT</span></div><h2>Have a question<br />worth <em>exploring?</em></h2><p>I'm always interested in learning, thoughtful collaborations and opportunities to work on meaningful data problems.</p><div className="contact-actions"><a href={profile.github} target="_blank" rel="noreferrer" className="button contact-button">Connect on GitHub <ArrowUpRight size={19} /></a><a href={profile.github + '?tab=repositories'} target="_blank" rel="noreferrer" className="button contact-secondary">Browse repositories <Github size={18} /></a></div><div className="contact-decoration" aria-hidden="true">↗</div></div></div></section>;
+  return <section className="contact-section" id="contact"><div className="shell"><div className="contact-inner"><div className="contact-topline"><span><span className="contact-pulse" /> LET'S BUILD SOMETHING MEANINGFUL</span><span>06 / CONNECT</span></div><h2>Have a question<br />worth <em>exploring?</em></h2><p>I'm always interested in learning, thoughtful collaborations and opportunities to work on meaningful data problems.</p><div className="contact-actions"><a href={profile.tableau} target="_blank" rel="noopener noreferrer" className="button contact-secondary">Tableau visualizations <ArrowUpRight size={17}/></a><a href={profile.github} target="_blank" rel="noreferrer" className="button contact-button">Connect on GitHub <ArrowUpRight size={19} /></a><a href={profile.github + '?tab=repositories'} target="_blank" rel="noreferrer" className="button contact-secondary">Browse repositories <Github size={18} /></a></div><div className="contact-decoration" aria-hidden="true">↗</div></div></div></section>;
 }
 
 function Footer() {
-  return <footer className="footer"><div className="shell footer-row"><Brand /><p>Built with React, curiosity, and a lot of questions.</p><div className="footer-right"><span>© {new Date().getFullYear()} JOHN PAUL TORRES</span><a href="#top">BACK TO TOP ↑</a></div></div></footer>;
+  return <footer className="footer"><div className="shell footer-row"><Brand /><p>SQL · Python · Tableau · Data storytelling.</p><div className="footer-right"><span>© {new Date().getFullYear()} JOHN PAUL TORRES</span><a href="#top">BACK TO TOP ↑</a></div></div></footer>;
 }
 
 function ProjectModal({ project, onClose }) {
@@ -306,7 +393,7 @@ export default function App() {
   return <>
     <a href="#work" className="skip-link">Skip to projects</a>
     <Header theme={theme} toggleTheme={toggleTheme} onSearch={() => setCommandOpen(true)} />
-    <main><Hero /><div className="ticker-bar" aria-hidden="true"><div className="shell ticker-content"><span>PYTHON <i>✳</i> SQL <i>✳</i> BUSINESS INTELLIGENCE <i>✳</i> DATA VISUALIZATION <i>✳</i> GEOSPATIAL ANALYTICS <i>✳</i> DATA PRODUCTS</span></div></div><Work onOpen={setSelected} /><Expertise /><Approach /><About /><Contact /></main>
+    <main><Hero /><div className="ticker-bar" aria-hidden="true"><div className="shell ticker-content"><span>PYTHON <i>✳</i> SQL <i>✳</i> BUSINESS INTELLIGENCE <i>✳</i> DATA VISUALIZATION <i>✳</i> GEOSPATIAL ANALYTICS <i>✳</i> DATA PRODUCTS</span></div></div><Work onOpen={setSelected} /><TableauGallery /><Expertise /><Approach /><About /><Contact /></main>
     <Footer />
     {selected && <ProjectModal project={selected} onClose={() => setSelected(null)} />}
     {commandOpen && <CommandPalette onClose={() => setCommandOpen(false)} onOpen={setSelected} />}
