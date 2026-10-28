@@ -65,3 +65,7 @@ The Philippine Economic Intelligence Dashboard uses published PSA observations w
 ## License
 
 This portfolio source is available for personal review. Project repositories have their own licenses; refer to each repository for its licensing terms.
+
+## Philippine map artwork
+
+The featured Philippine Economic Intelligence Dashboard card uses **real regional coastline geometry** derived from the 18-region PSGC boundary TopoJSON in [faeldon/philippines-json-maps](https://github.com/faeldon/philippines-json-maps) (MIT, Copyright © James Faeldon), also used by the [economic dashboard project](https://github.com/JP-bott/Philippine-Economic-Intelligence-Dashboard). The vector paths are simplified and scaled for this illustrative project gallery artwork. Regional fill opacity is purely decorative and **does not encode economic values**. The full upstream copyright notice and license appear in [PHILIPPINE_MAP_LICENSE.md](PHILIPPINE_MAP_LICENSE.md).

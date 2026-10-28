@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { filters, financialSample, profile, projects, skillGroups } from './data.js';
+import { philippineRegionPaths } from './philippineRegionPaths.js';
 
 const PROJECT_COUNT = projects.length;
 const FEATURED_COUNT = projects.filter((project) => project.featured).length;
@@ -154,31 +155,34 @@ function ProjectArtwork({ project }) {
   const visual = (() => {
     switch (project.visual) {
       case 'economy': return <>
-        <g transform="translate(30 27)">
-          <text x="6" y="13" className="art-small">PHILIPPINE ECONOMIC ATLAS</text>
-          <text x="6" y="31" className="art-number">18 REGIONS / PSA DATA</text>
-          <g transform="translate(42 50)">
-            <path d="M83 5L100 17L95 32L111 42L101 57L113 74L98 91L83 86L73 66L60 51L66 34L60 20Z" fill="var(--project-accent)" opacity=".3" stroke="var(--project-accent)" strokeWidth="1.2"/>
-            <path d="M48 70L60 82L56 107L38 116L24 103L30 84Z" fill="var(--project-accent)" opacity=".55"/>
-            <path d="M90 108L111 98L125 110L118 126L100 130Z" fill="var(--project-accent)" opacity=".77"/>
-            <path d="M118 141L137 128L157 141L165 162L149 178L131 166Z" fill="var(--project-accent)" opacity=".4"/>
-            <path d="M169 146L186 149L189 173L177 193L163 181Z" fill="var(--project-accent)" opacity=".62"/>
-            <path d="M108 181L120 180L128 196L115 206L103 196Z" fill="var(--project-accent)" opacity=".27"/>
-            <circle cx="139" cy="114" r="13" fill="none" stroke="var(--project-accent)" strokeWidth="1.5" strokeDasharray="3 4"/>
-            <circle cx="139" cy="114" r="3.5" fill="var(--project-accent)"/>
-            <path d="M139 114L201 93" stroke="var(--project-accent)" strokeDasharray="3 5" opacity=".65"/>
-            <rect x="190" y="73" width="98" height="35" rx="7" fill="var(--art-card)" stroke="var(--art-line)"/>
-            <text x="202" y="88" className="art-small">REGIONAL VIEW</text>
-            <text x="202" y="101" className="art-number">GDP / CPI / LFS</text>
+        <g aria-hidden="true">
+          <ellipse cx="178" cy="153" rx="112" ry="115" fill="var(--project-accent)" fillOpacity=".045" />
+          <g stroke="var(--art-bg)" strokeWidth=".6" strokeLinejoin="round" fillRule="evenodd">
+            {philippineRegionPaths.map((region, index) => (
+              <path
+                key={region.id}
+                d={region.d}
+                fill="var(--project-accent)"
+                fillOpacity={0.40 + (index % 3) * 0.13}
+              />
+            ))}
           </g>
+          <path d="M71 107H94M267 172H286M71 206H94" stroke="var(--project-accent)" strokeOpacity=".25" strokeDasharray="3 5" />
+          <circle cx="180" cy="153" r="104" fill="none" stroke="var(--project-accent)" strokeOpacity=".09" strokeDasharray="3 8" />
+          <text x="37" y="251" className="art-small">PSGC / 18 REGIONS</text>
         </g>
-        <g transform="translate(370 61)">
-          <rect width="160" height="178" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/>
-          <text x="16" y="26" className="art-small">ECONOMIC TRENDS</text>
-          <path d="M18 141H141M18 100H141M18 59H141" fill="none" stroke="var(--art-line)" strokeDasharray="3 5"/>
-          <path d="M18 132L43 118L69 125L96 94L117 98L143 62" stroke="var(--project-accent)" strokeWidth="2.7" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-          <circle cx="143" cy="62" r="4.5" fill="var(--project-accent)"/>
-          <text x="17" y="162" className="art-small">2018 / 2025</text>
+        <g transform="translate(298 46)">
+          <text x="0" y="0" className="art-small">PHILIPPINE ECONOMIC ATLAS</text>
+          <text x="0" y="24" className="art-number">GROWTH / LABOR / PRICES</text>
+          <g transform="translate(0 47)">
+            <rect width="226" height="149" rx="10" fill="var(--art-card)" stroke="var(--art-line)" />
+            <text x="16" y="24" className="art-small">REGIONAL INDICATORS</text>
+            <path d="M17 111H209M17 82H209M17 53H209" stroke="var(--art-line)" strokeDasharray="3 5" />
+            <path d="M18 111L48 103L75 108L108 85L137 90L165 69L202 57" fill="none" stroke="var(--project-accent)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+            <circle cx="202" cy="57" r="4" fill="var(--project-accent)" />
+            <text x="16" y="133" className="art-small">PSA / ECONOMIC DATA</text>
+          </g>
+          <text x="0" y="225" className="art-small">ACTUAL REGIONAL BOUNDARIES</text>
         </g>
       </>;
       case 'geo': return <><g stroke="var(--project-accent)" fill="none" opacity=".16" strokeWidth="1"><path d="M100 54L188 98L270 60L359 108L448 72M95 174L166 218L284 180L402 234L473 178M188 98L166 218M270 60L284 180M359 108L402 234M448 72L473 178" /></g><g fill="var(--project-accent)" opacity=".1"><path d="M213 32l38 17-3 29 34 18-15 24 13 19-30 39 14 18-33 26-21-13-10-35-32-18-4-37 21-18-3-30z" /></g><g stroke="var(--project-accent)" strokeWidth="2.6" fill="none" strokeLinecap="round"><path d="M158 158Q226 30 335 117T462 137" strokeDasharray="5 9"/><path d="M147 209Q245 161 334 117" opacity=".65"/></g>{[[158,158],[335,117],[462,137],[147,209],[265,72]].map(([x,y],i)=><g key={i}><circle cx={x} cy={y} r="12" fill="var(--project-accent)" opacity=".13" /><circle cx={x} cy={y} r="4.5" fill="var(--project-accent)" /></g>)}<rect x="37" y="38" width="132" height="54" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/><text x="53" y="59" className="art-small">SHIPMENT NETWORK</text><text x="53" y="78" className="art-number">PH / REGIONS</text><rect x="366" y="199" width="146" height="46" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/><text x="383" y="218" className="art-small">CORRIDOR ANALYSIS</text><path d="M383 231H495" stroke="var(--project-accent)" strokeWidth="3" strokeLinecap="round" /></>;
