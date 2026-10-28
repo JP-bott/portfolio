@@ -7,7 +7,7 @@ A responsive Vite + React portfolio showcasing real GitHub case studies in SQL, 
 
 ## Highlights
 
-- Nine curated GitHub projects based on their public repository READMEs, each linking to original source code
+- Ten curated GitHub projects based on their public repository READMEs, each linking to original source code, including the Philippine Economic Intelligence Dashboard with published PSA statistics
 - Dedicated Tableau Public gallery with public workbook thumbnails, filtering, sorting and interactive previews
 - Project search, category filters, expandable case studies and keyboard command search (`Ctrl/⌘ + K`)
 - Interactive financial example with sourced **synthetic** figures and readable hover tooltips
@@ -60,7 +60,7 @@ React 19, Vite 6, Recharts, lucide-react, custom responsive CSS, Google Fonts (M
 
 ## Data ethics
 
-The financial, inventory, stock market sample, retail, and logistics case studies use fictional organizations and synthetic datasets. Their numerical insights are demonstrations rather than observed commercial results. Project summaries are based on their public READMEs and may need editing as the underlying work evolves.
+The Philippine Economic Intelligence Dashboard uses published PSA observations with indicator-specific reporting periods (2018–2025) and source references. It is a dated snapshot, not a real-time API. The financial, inventory, stock market sample, retail, and logistics case studies use fictional organizations and synthetic datasets. Their numerical insights are demonstrations rather than observed commercial results. Project summaries are based on their public READMEs and may need editing as the underlying work evolves.
 
 ## License
 

@@ -153,6 +153,34 @@ function ProjectArtwork({ project }) {
   const common = <><defs><pattern id={'grid-' + project.id} width="26" height="26" patternUnits="userSpaceOnUse"><path d="M26 0H0V26" stroke="currentColor" strokeOpacity=".08" fill="none" /></pattern><linearGradient id={'fill-' + project.id} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="var(--project-accent)" stopOpacity=".43" /><stop offset="1" stopColor="var(--project-accent)" stopOpacity=".01" /></linearGradient></defs><rect width="560" height="285" fill={'url(#grid-' + project.id + ')'} /></>;
   const visual = (() => {
     switch (project.visual) {
+      case 'economy': return <>
+        <g transform="translate(30 27)">
+          <text x="6" y="13" className="art-small">PHILIPPINE ECONOMIC ATLAS</text>
+          <text x="6" y="31" className="art-number">18 REGIONS / PSA DATA</text>
+          <g transform="translate(42 50)">
+            <path d="M83 5L100 17L95 32L111 42L101 57L113 74L98 91L83 86L73 66L60 51L66 34L60 20Z" fill="var(--project-accent)" opacity=".3" stroke="var(--project-accent)" strokeWidth="1.2"/>
+            <path d="M48 70L60 82L56 107L38 116L24 103L30 84Z" fill="var(--project-accent)" opacity=".55"/>
+            <path d="M90 108L111 98L125 110L118 126L100 130Z" fill="var(--project-accent)" opacity=".77"/>
+            <path d="M118 141L137 128L157 141L165 162L149 178L131 166Z" fill="var(--project-accent)" opacity=".4"/>
+            <path d="M169 146L186 149L189 173L177 193L163 181Z" fill="var(--project-accent)" opacity=".62"/>
+            <path d="M108 181L120 180L128 196L115 206L103 196Z" fill="var(--project-accent)" opacity=".27"/>
+            <circle cx="139" cy="114" r="13" fill="none" stroke="var(--project-accent)" strokeWidth="1.5" strokeDasharray="3 4"/>
+            <circle cx="139" cy="114" r="3.5" fill="var(--project-accent)"/>
+            <path d="M139 114L201 93" stroke="var(--project-accent)" strokeDasharray="3 5" opacity=".65"/>
+            <rect x="190" y="73" width="98" height="35" rx="7" fill="var(--art-card)" stroke="var(--art-line)"/>
+            <text x="202" y="88" className="art-small">REGIONAL VIEW</text>
+            <text x="202" y="101" className="art-number">GDP / CPI / LFS</text>
+          </g>
+        </g>
+        <g transform="translate(370 61)">
+          <rect width="160" height="178" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/>
+          <text x="16" y="26" className="art-small">ECONOMIC TRENDS</text>
+          <path d="M18 141H141M18 100H141M18 59H141" fill="none" stroke="var(--art-line)" strokeDasharray="3 5"/>
+          <path d="M18 132L43 118L69 125L96 94L117 98L143 62" stroke="var(--project-accent)" strokeWidth="2.7" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+          <circle cx="143" cy="62" r="4.5" fill="var(--project-accent)"/>
+          <text x="17" y="162" className="art-small">2018 / 2025</text>
+        </g>
+      </>;
       case 'geo': return <><g stroke="var(--project-accent)" fill="none" opacity=".16" strokeWidth="1"><path d="M100 54L188 98L270 60L359 108L448 72M95 174L166 218L284 180L402 234L473 178M188 98L166 218M270 60L284 180M359 108L402 234M448 72L473 178" /></g><g fill="var(--project-accent)" opacity=".1"><path d="M213 32l38 17-3 29 34 18-15 24 13 19-30 39 14 18-33 26-21-13-10-35-32-18-4-37 21-18-3-30z" /></g><g stroke="var(--project-accent)" strokeWidth="2.6" fill="none" strokeLinecap="round"><path d="M158 158Q226 30 335 117T462 137" strokeDasharray="5 9"/><path d="M147 209Q245 161 334 117" opacity=".65"/></g>{[[158,158],[335,117],[462,137],[147,209],[265,72]].map(([x,y],i)=><g key={i}><circle cx={x} cy={y} r="12" fill="var(--project-accent)" opacity=".13" /><circle cx={x} cy={y} r="4.5" fill="var(--project-accent)" /></g>)}<rect x="37" y="38" width="132" height="54" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/><text x="53" y="59" className="art-small">SHIPMENT NETWORK</text><text x="53" y="78" className="art-number">PH / REGIONS</text><rect x="366" y="199" width="146" height="46" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/><text x="383" y="218" className="art-small">CORRIDOR ANALYSIS</text><path d="M383 231H495" stroke="var(--project-accent)" strokeWidth="3" strokeLinecap="round" /></>;
       case 'retail': return <><g transform="translate(44 42)"><text y="1" className="art-small">REVENUE BY PERIOD</text><path d="M0 181H462" stroke="currentColor" strokeOpacity=".25"/><path d="M0 137H462M0 93H462M0 49H462" stroke="currentColor" strokeOpacity=".11" strokeDasharray="4 6"/>{[65,92,73,116,141,102,151,124,174,160,199,213].map((h,i)=><rect key={i} x={14+i*37} y={180-h*.78} width="22" height={h*.78} rx="4" fill="var(--project-accent)" opacity={.26+i*.057}/>) }<path d="M25 115L62 103L99 111L136 84L173 77L210 98L247 66L284 78L321 53L358 57L395 40L432 24" fill="none" stroke="var(--art-bright)" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" /></g><rect x="333" y="28" width="177" height="52" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/><text x="349" y="49" className="art-small">RELATIONAL ANALYSIS</text><text x="349" y="67" className="art-number">SQL → PYTHON</text></>;
       case 'finance': return <><text x="40" y="45" className="art-small">PROFITABILITY OVERVIEW</text><path d="M38 215H525M38 166H525M38 117H525M38 68H525" stroke="currentColor" strokeOpacity=".12" strokeDasharray="4 6"/><path d="M41 208C93 208 96 177 143 178S224 119 275 138S351 103 396 108S473 56 518 65V240H41Z" fill={'url(#fill-' + project.id + ')'} /><path d="M41 208C93 208 96 177 143 178S224 119 275 138S351 103 396 108S473 56 518 65" fill="none" stroke="var(--project-accent)" strokeWidth="3.5" strokeLinecap="round"/><circle cx="396" cy="108" r="6" fill="var(--project-accent)" stroke="var(--art-bg)" strokeWidth="3"/><rect x="336" y="121" width="154" height="62" rx="10" fill="var(--art-card)" stroke="var(--art-line)"/><text x="352" y="143" className="art-small">MEASURE WHAT MATTERS</text><text x="352" y="166" className="art-number">REVENUE / MARGIN</text></>;
@@ -181,7 +209,7 @@ function ProjectCard({ project, onOpen }) {
   return <article className={'project-card accent-' + project.accent} onMouseMove={handleMove}>
     <div className="project-card-glow" aria-hidden="true" />
     <button className="project-art-button" type="button" onClick={() => onOpen(project)} aria-label={'View case study: ' + project.title}><ProjectArtwork project={project} /><span className="art-open"><ArrowUpRight size={17} /></span></button>
-    <div className="card-content"><div className="card-overline"><span>{project.domain}</span><span>{project.number} / 09</span></div><div className="card-title-row"><h3>{project.title}</h3></div><p>{project.subtitle}</p><div className="card-tags">{project.tags.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div></div>
+    <div className="card-content"><div className="card-overline"><span>{project.domain}</span><span>{project.number} / {String(PROJECT_COUNT).padStart(2, '0')}</span></div><div className="card-title-row"><h3>{project.title}</h3></div><p>{project.subtitle}</p><div className="card-tags">{project.tags.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div></div>
   </article>;
 }
 
