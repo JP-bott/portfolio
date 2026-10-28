@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Activity, ArrowDown, ArrowRight, ArrowUpRight, BarChart3, Check, ChevronRight,
-  Command, Database, ExternalLink, Github, Layers3, MapPin, Menu, Moon,
+  Command, Database, ExternalLink, Layers3, MapPin, Menu, Moon,
   Search, SlidersHorizontal, Sun, TrendingUp, X,
 } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
@@ -140,12 +140,12 @@ function Hero() {
         <div className="hero-identity">HELLO, I'M JOHN PAUL TORRES <span>↗</span></div>
         <h1>Making<br /><span className="hero-title-accent">information</span><br />useful<span className="headline-period">.</span></h1>
         <p className="hero-description">Aspiring data analyst focused on turning complex data into clear stories, practical dashboards, and better-informed decisions.</p>
-        <div className="hero-cta"><a className="button button-primary" href="#work">Explore my work <ArrowUpRight size={18} /></a><a className="button button-quiet" href={profile.github} target="_blank" rel="noreferrer"><Github size={18} /> GitHub profile</a></div>
+        <div className="hero-cta"><a className="button button-primary" href="#work">Explore my work <ArrowUpRight size={18} /></a></div>
         <div className="hero-bottom-note"><span className="note-rule" /><span>PYTHON &nbsp;/&nbsp; SQL &nbsp;/&nbsp; VISUAL ANALYTICS</span></div>
       </div>
       <div className="hero-visual" data-reveal><AnalyticsPreview /></div>
     </div>
-    <div className="shell hero-footer"><a href="#work" className="scroll-invite">SCROLL TO EXPLORE <ArrowDown size={14} /></a><span>BASED IN THE PHILIPPINES <span className="text-accent">✳</span> BUILDING WITH CURIOSITY</span></div>
+    <div className="shell hero-footer"><span className="scroll-invite">SCROLL TO DISCOVER <ArrowDown size={14} /></span><span>BASED IN THE PHILIPPINES <span className="text-accent">✳</span> BUILDING WITH CURIOSITY</span></div>
   </section>;
 }
 
@@ -181,7 +181,7 @@ function ProjectCard({ project, onOpen }) {
   return <article className={'project-card accent-' + project.accent} onMouseMove={handleMove}>
     <div className="project-card-glow" aria-hidden="true" />
     <button className="project-art-button" type="button" onClick={() => onOpen(project)} aria-label={'View case study: ' + project.title}><ProjectArtwork project={project} /><span className="art-open"><ArrowUpRight size={17} /></span></button>
-    <div className="card-content"><div className="card-overline"><span>{project.domain}</span><span>{project.number} / 09</span></div><div className="card-title-row"><h3>{project.title}</h3><button aria-label={'Open ' + project.title + ' case study'} onClick={() => onOpen(project)} className="card-round-link"><ArrowUpRight size={18} /></button></div><p>{project.subtitle}</p><div className="card-tags">{project.tags.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div></div>
+    <div className="card-content"><div className="card-overline"><span>{project.domain}</span><span>{project.number} / 09</span></div><div className="card-title-row"><h3>{project.title}</h3></div><p>{project.subtitle}</p><div className="card-tags">{project.tags.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div></div>
   </article>;
 }
 
@@ -287,7 +287,7 @@ function TableauGallery() {
       <div className="tableau-controls"><div className="tableau-count"><span className="tableau-live-dot"/><strong>{items.length.toString().padStart(2,'0')}</strong> PUBLISHED VIZZES</div><div className="tableau-form"><label><Search size={16}/><input value={search} type="search" placeholder="Search Tableau dashboards" aria-label="Search Tableau dashboards" onChange={e=>{setSearch(e.target.value);setExpanded(false);}}/></label><select value={sort} onChange={e=>setSort(e.target.value)} aria-label="Sort Tableau visualizations"><option value="recent">Newest first</option><option value="popular">Most viewed</option><option value="title">A to Z</option></select></div></div>
       {matching.length ? <div className="tableau-grid">{visible.map(v=><TableauCard key={v.id} viz={v} onPreview={setPreview}/>)}</div> : <div className="tableau-empty"><Search size={25}/><h3>No matching visualizations</h3><button className="tableau-clear" onClick={()=>setSearch('')}>Clear search <ArrowRight size={15}/></button></div>}
       {!expanded && !search && matching.length>visible.length && <div className="tableau-more"><button className="button button-outline" onClick={()=>setExpanded(true)}>Show all {matching.length} visualizations <ArrowDown size={16}/></button></div>}
-      <div className="tableau-end"><span>VERIFIED THUMBNAILS & WORKBOOK DETAILS FROM TABLEAU PUBLIC</span><a href={TABLEAU_URL} target="_blank" rel="noopener noreferrer">FULL PROFILE <ArrowUpRight size={14}/></a></div>
+      <div className="tableau-end"><span>THUMBNAILS & WORKBOOK DETAILS FROM TABLEAU PUBLIC</span></div>
     </>}
     {preview && <TableauPreview viz={preview} onClose={()=>setPreview(null)}/>}
   </div></section>;
@@ -311,15 +311,15 @@ function Approach() {
 }
 
 function About() {
-  return <section className="section about-section" id="about"><div className="shell about-layout"><div className="about-graphic" data-reveal><div className="about-graphic-grid" /><div className="about-graphic-top">A WORK IN PROGRESS <span>↗</span></div><div className="about-monogram">JP<span>.</span></div><div className="about-graphic-bottom"><span>LEARN / BUILD / REFINE</span><span>PH · 2026</span></div><span className="orbit-circle orbit-a" /><span className="orbit-circle orbit-b" /></div><div className="about-copy" data-reveal><div className="section-index"><span>05</span> / A BIT ABOUT ME</div><h2>Curiosity is<br /><em>the starting point.</em></h2><p>I'm John Paul Torres, an aspiring data analytics professional based in the Philippines. I am interested in the space where data, design and decision-making intersect.</p><p>My projects span business intelligence dashboards, relational analysis, location-aware logistics tools and data applications. I enjoy both the analytical work behind the numbers and the challenge of making those numbers easy to understand.</p><div className="about-values"><span><Check size={15} /> Business-first questions</span><span><Check size={15} /> Reproducible workflows</span><span><Check size={15} /> Thoughtful visual design</span></div><a className="inline-link" href={profile.github} target="_blank" rel="noreferrer">Explore my development journey <ArrowUpRight size={18} /></a></div></div></section>;
+  return <section className="section about-section" id="about"><div className="shell about-layout"><div className="about-graphic" data-reveal><div className="about-graphic-grid" /><div className="about-graphic-top">A WORK IN PROGRESS <span>↗</span></div><div className="about-monogram">JP<span>.</span></div><div className="about-graphic-bottom"><span>LEARN / BUILD / REFINE</span><span>PH · 2026</span></div><span className="orbit-circle orbit-a" /><span className="orbit-circle orbit-b" /></div><div className="about-copy" data-reveal><div className="section-index"><span>05</span> / A BIT ABOUT ME</div><h2>Curiosity is<br /><em>the starting point.</em></h2><p>I'm John Paul Torres, an aspiring data analytics professional based in the Philippines. I am interested in the space where data, design and decision-making intersect.</p><p>My projects span business intelligence dashboards, relational analysis, location-aware logistics tools and data applications. I enjoy both the analytical work behind the numbers and the challenge of making those numbers easy to understand.</p><div className="about-values"><span><Check size={15} /> Business-first questions</span><span><Check size={15} /> Reproducible workflows</span><span><Check size={15} /> Thoughtful visual design</span></div></div></div></section>;
 }
 
 function Contact() {
-  return <section className="contact-section" id="contact"><div className="shell"><div className="contact-inner"><div className="contact-topline"><span><span className="contact-pulse" /> LET'S BUILD SOMETHING MEANINGFUL</span><span>06 / CONNECT</span></div><h2>Have a question<br />worth <em>exploring?</em></h2><p>I'm always interested in learning, thoughtful collaborations and opportunities to work on meaningful data problems.</p><div className="contact-actions"><a href={profile.tableau} target="_blank" rel="noopener noreferrer" className="button contact-secondary">Tableau visualizations <ArrowUpRight size={17}/></a><a href={profile.github} target="_blank" rel="noreferrer" className="button contact-button">Connect on GitHub <ArrowUpRight size={19} /></a><a href={profile.github + '?tab=repositories'} target="_blank" rel="noreferrer" className="button contact-secondary">Browse repositories <Github size={18} /></a></div><div className="contact-decoration" aria-hidden="true">↗</div></div></div></section>;
+  return <section className="contact-section" id="contact"><div className="shell"><div className="contact-inner"><div className="contact-topline"><span><span className="contact-pulse" /> LET'S BUILD SOMETHING MEANINGFUL</span><span>06 / CONNECT</span></div><h2>Have a question<br />worth <em>exploring?</em></h2><p>I'm always interested in learning, thoughtful collaborations and opportunities to work on meaningful data problems.</p><div className="contact-actions"><a href={profile.github} target="_blank" rel="noopener noreferrer" className="button contact-button">Connect on GitHub <ArrowUpRight size={19} /></a></div><div className="contact-decoration" aria-hidden="true">↗</div></div></div></section>;
 }
 
 function Footer() {
-  return <footer className="footer"><div className="shell footer-row"><Brand /><p>SQL · Python · Tableau · Data storytelling.</p><div className="footer-right"><span>© {new Date().getFullYear()} JOHN PAUL TORRES</span><a href="#top">BACK TO TOP ↑</a></div></div></footer>;
+  return <footer className="footer"><div className="shell footer-row"><Brand /><p>SQL · Python · Tableau · Data storytelling.</p><div className="footer-right"><span>© {new Date().getFullYear()} JOHN PAUL TORRES</span></div></div></footer>;
 }
 
 function ProjectModal({ project, onClose }) {
